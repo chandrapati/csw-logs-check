@@ -2,16 +2,15 @@
 
 Cursor Agent Skill for analyzing **Cisco Secure Workload (CSW)** agent diagnostic log bundles (`*_csw-logs`).
 
-Answers common POV questions from `tet-enforcer.log` and related artifacts:
+Answers common POV questions from agent exports:
 
 - Is the policy defined on the agent?
 - Is it rendered on the host (nftables / iptables)?
 - When was it **applied** vs when did **enforcement mode** turn on?
+- What else is in the bundle (all policies, nflog, proxy, errors)?
 - How do two hosts compare on delivery vs on-host commit latency?
 
 ## Install (Cursor)
-
-Clone and copy the skill folder into your personal skills directory:
 
 ```bash
 git clone https://github.com/chandrapati/csw-logs-check.git
@@ -19,21 +18,27 @@ mkdir -p ~/.cursor/skills
 cp -R csw-logs-check ~/.cursor/skills/csw-logs-check
 ```
 
-Or symlink:
+Or symlink: `ln -s "$(pwd)/csw-logs-check" ~/.cursor/skills/csw-logs-check`
 
-```bash
-ln -s "$(pwd)/csw-logs-check" ~/.cursor/skills/csw-logs-check
-```
-
-In Cursor, ask the agent to use **csw-logs-check**, for example:
+Example prompt:
 
 > Use csw-logs-check on `/path/to/my_host_*_csw-logs` and write an enforcement validation report.
 
-## Parser utility
+## Documentation
 
-No extra dependencies (Python 3.9+ stdlib only):
+| Doc | Contents |
+|-----|----------|
+| [**docs/USAGE-WITH-LOGS.md**](docs/USAGE-WITH-LOGS.md) | Step-by-step: obtain bundle → scripts → manual grep → timeline → Cursor prompts |
+| [**reference.md**](reference.md) | Full extraction catalog, grep patterns, report templates |
+| [**SKILL.md**](SKILL.md) | Agent skill instructions (loaded by Cursor) |
+
+## Scripts (Python 3.9+, stdlib only)
 
 ```bash
+# Summary: identity, firewall stack, policy table, enforcer/sensor highlights
+python3 scripts/parse_bundle_summary.py /path/to/agent_csw-logs
+
+# Timeline: enforce on, firewall, receive/apply per version, deltas
 python3 scripts/parse_enforcer_timeline.py /path/to/agent_csw-logs
 ```
 
@@ -41,10 +46,12 @@ python3 scripts/parse_enforcer_timeline.py /path/to/agent_csw-logs
 
 | Path | Description |
 |------|-------------|
-| `SKILL.md` | Agent skill instructions |
-| `reference.md` | Grep patterns and report templates |
-| `examples/two-host-comparison.md` | Generic comparison pattern (synthetic) |
-| `scripts/parse_enforcer_timeline.py` | Timeline extractor |
+| `SKILL.md` | Cursor agent skill |
+| `docs/USAGE-WITH-LOGS.md` | Detailed usage with real log workflows |
+| `reference.md` | What to extract from each log/artifact |
+| `examples/two-host-comparison.md` | Generic comparison pattern |
+| `scripts/parse_bundle_summary.py` | Bundle inventory + policy highlights |
+| `scripts/parse_enforcer_timeline.py` | Enforcer event timeline |
 
 ## Key concept
 
