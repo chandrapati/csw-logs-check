@@ -251,3 +251,17 @@ Logs prove **configuration and host programming**. They rarely prove a **specifi
 | Bundle exported before policy push | Re-export after push; old proto won’t have new rules |
 | Claiming deny without sensor/UI proof | State “configured + applied”; recommend Denied Connections |
 | Ignoring other policies in bundle | Document catch-all ALLOW/DENY order (ids 2–5, etc.) |
+| “Preserve Rules keeps CSW policy after reboot” | Preserve = **coexist with local firewall**; reboot gap = agent startup / apply time — [PRESERVE-RULES.md](PRESERVE-RULES.md) |
+| Testing ping immediately after reboot | Wait until `Policy config has been applied successfully` for target version |
+
+---
+
+## Preserve Rules and post-reboot tests
+
+If the customer sees **traffic allowed briefly after reboot** (e.g. ping works for a short window):
+
+1. Capture `tet-enforcer.log` from a bundle exported **after** a controlled reboot test.
+2. Measure **reboot → `Firewall is now enabled` → apply of target version** (same as any policy timing).
+3. Do **not** assume toggling Preserve Rules fixes the window — see **[PRESERVE-RULES.md](PRESERVE-RULES.md)**.
+
+Functional tests after reboot must use the same **T_live** cutoff as steady-state tests.

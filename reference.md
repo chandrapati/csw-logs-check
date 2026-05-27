@@ -283,6 +283,25 @@ Use only as a **pattern** — always re-derive from fresh exports:
 - **Denied Connections** / forensics for protocol + src/dst after test  
 - Policy version in UI vs `current version` in enforcer log  
 - Flow table: confirm traffic uses the instrumented host (not bypass via LB)
+- Agent Config Profile → **Preserve Rules** (coexistence with local firewall—not reboot persistence)
+
+---
+
+## Preserve Rules and reboot (see full note)
+
+**[docs/PRESERVE-RULES.md](docs/PRESERVE-RULES.md)**
+
+| Topic | Summary |
+|-------|---------|
+| What it is | Coexist with **existing** host `iptables`/`ipset` (ON) vs clear then apply CSW (OFF, default) |
+| What it is not | Keeping CSW deny rules in memory across reboot |
+| `/opt/cisco/tetration/backup` | One-time backup of **pre-CSW local** firewall at **first** enforce enable |
+| Post-reboot ping allowed briefly | Usually **before** agent applies policy; use `T_live` from enforcer log |
+| Will toggling preserve fix reboot gap? | **Unlikely** — address agent start order, test timing, network ACLs |
+
+```bash
+rg -n "deviation|reprogram|preserve|backup|Firewall is now enabled" "$BUNDLE/log/tet-enforcer.log" | tail -40
+```
 
 ---
 

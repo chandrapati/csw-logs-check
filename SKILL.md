@@ -13,7 +13,8 @@ description: >-
 Analyze **CSW agent diagnostic exports** (`*_csw-logs` directories) to answer: policy defined? on-host rules? when applied? enforce mode vs policy live?
 
 **Detailed how-to with logs:** [docs/USAGE-WITH-LOGS.md](docs/USAGE-WITH-LOGS.md)  
-**Extraction catalog & grep patterns:** [reference.md](reference.md)
+**Extraction catalog & grep patterns:** [reference.md](reference.md)  
+**Preserve Rules (coexistence vs reboot):** [docs/PRESERVE-RULES.md](docs/PRESERVE-RULES.md)
 
 ## When to use
 
@@ -117,7 +118,9 @@ Compare two csw-logs bundles (paths …). Same policy id. Timing comparison only
 
 **Do not claim:** a specific flow was dropped unless deny telemetry / Denied Connections cited.
 
-**Recommend:** test after cutoff T; CSW **Enforce** mode; Denied Connections after ping/curl.
+**Recommend:** test after cutoff T; CSW **Enforce** mode; Denied Connections after functional test.
+
+**Preserve Rules:** Not “CSW policy survives reboot.” It controls coexistence with **pre-existing host firewall** rules; first enforce backs up local `iptables`/`ipset` to `/opt/cisco/tetration/backup`. Post-reboot allow windows are usually **agent-not-ready-yet**—measure with timeline logs; changing preserve is **unlikely** to remove that gap. See [docs/PRESERVE-RULES.md](docs/PRESERVE-RULES.md).
 
 ## Deliverable naming
 

@@ -29,6 +29,7 @@ Example prompt:
 | Doc | Contents |
 |-----|----------|
 | [**docs/USAGE-WITH-LOGS.md**](docs/USAGE-WITH-LOGS.md) | Step-by-step: obtain bundle → scripts → manual grep → timeline → Cursor prompts |
+| [**docs/PRESERVE-RULES.md**](docs/PRESERVE-RULES.md) | Preserve Rules vs reboot gap, backup dir, EDR coexistence, POV talking points |
 | [**reference.md**](reference.md) | Full extraction catalog, grep patterns, report templates |
 | [**SKILL.md**](SKILL.md) | Agent skill instructions (loaded by Cursor) |
 
